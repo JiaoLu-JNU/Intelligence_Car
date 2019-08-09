@@ -56,7 +56,7 @@ void Mode_run(u8 mode)
 	}
 }
 
-/*
+
 void Remote_Ctr_Gear(u8 key)
 {
 	extern u16 gear_run;
@@ -91,7 +91,7 @@ void Remote_Ctr_Gear(u8 key)
 	}
 
 }
-*/
+
 
 
 
