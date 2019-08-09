@@ -36,3 +36,5 @@
 ..\obj\remote_ctr.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\remote_ctr.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\remote_ctr.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
+..\obj\remote_ctr.o: ..\HARDWARE\Trace\trace.h
+..\obj\remote_ctr.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h

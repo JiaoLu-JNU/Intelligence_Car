@@ -1,12 +1,15 @@
 #include "remote_ctr.h"
+#include "trace.h"
+#include "obstacle_avoid.h"
 
+extern float UltrasonicWave_Distance;
 void Remote_Ctr_Init(void)
 {
 	
 }
 
 
-void Mode_select(u8 key)
+u8 Mode_select(u8 key)
 {
 	switch(key)
 	{
@@ -18,40 +21,42 @@ void Mode_select(u8 key)
 			break;
 		case 16://TRACE_MODE
 				Trace_Init();	
-				//TRACE_Implement(void)
+				TRACE_Implement();
 			break;
 		case 14://OBSTACLE_AVOID_MODE
 				TIM4_PWM_Init(200-1,7199-1);
 				HCSR04_Init();
+				//Obstacle_avoid(UltrasonicWave_Distance);
 			break;
 		default:
 			break;
+		
 	}
+	return 0;
 }
 
-void Mode_run(u8 key)
+void Mode_run(u8 mode)
 {
-	switch(key)
+	switch(mode)
 	{
-		case 13://REMOTE_CTR_MODE
+		case 1://REMOTE_CTR_MODE
 				
 			break;
-		case 15://BLUETOOTH_MODE
+		case 2://BLUETOOTH_MODE
 
 			break;
 		case 16://TRACE_MODE
-				TRACE_Implement(void);
+				TRACE_Implement();
 			break;
 		case 14://OBSTACLE_AVOID_MODE
-				TIM4_PWM_Init(200-1,7199-1);
-				HCSR04_Init();
+				Obstacle_avoid(UltrasonicWave_Distance);
 			break;
 		default:
 			break;
 	}
 }
 
-
+/*
 void Remote_Ctr_Gear(u8 key)
 {
 	extern u16 gear_run;
@@ -86,7 +91,7 @@ void Remote_Ctr_Gear(u8 key)
 	}
 
 }
-
+*/
 
 
 
