@@ -338,7 +338,7 @@ void Obstacle_avoid(float distance)
 				{
 						TIM_SetCompare1(TIM4, 186);//ÃΩ≤‚“«ªÿ¡„Œª
 						reverse(GEAR);
-						delay_ms(2000);
+						delay_ms(5000);
 						left_move(GEAR+1);
 						delay_ms(3000);
 						drive(GEAR);
