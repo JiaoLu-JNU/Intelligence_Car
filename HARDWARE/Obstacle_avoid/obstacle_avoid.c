@@ -174,8 +174,8 @@ void HCSR04_Init(void)
 		
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
 
-    TIM_TimeBaseInitStructure.TIM_Prescaler = 8399;
-    TIM_TimeBaseInitStructure.TIM_Period = 10000;
+    TIM_TimeBaseInitStructure.TIM_Prescaler = 83;//分频系数83，频率为1MHz，理论测量精度0.34mm
+    TIM_TimeBaseInitStructure.TIM_Period = 50000;//计数周期50000,相当于0.05s,最大测量范围17m
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 
@@ -202,7 +202,7 @@ void HCSR04_Init(void)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5,ENABLE);
 
     TIM_TimeBaseInitStructure.TIM_Prescaler = 83;
-    TIM_TimeBaseInitStructure.TIM_Period = 100000;
+    TIM_TimeBaseInitStructure.TIM_Period = 100;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 
@@ -233,7 +233,8 @@ void HCSR04_Init(void)
 void HCSR04_StartMeasure(void)
 {
     GPIO_SetBits(SONAR_PORT, TRIG_PIN);
-    delay_us(20);   //  The width of trig signal must be greater than 10us
+    delay_us_unpre(40);   //  The width of trig signal must be greater than 10us.出现在定时器5的中断函数中，所以不能用系统延时
+	                        //  自定义普通延时函数，已解决延时失效问题
     GPIO_ResetBits(SONAR_PORT, TRIG_PIN);
 		printf("Test start!");
 }
@@ -247,7 +248,7 @@ float HCSR04_GetDistance(u32 count)
 {
 		float distance;
     // distance = measurement/2/1000*340 = measurement/59 (cm)  measurement-units:us
-    distance = (float)count *100 / 58.8;   // measurement-units:us
+    distance = (float)count / 29.412;   // measurement-units:us
 
     return distance;
 }
@@ -323,14 +324,14 @@ void Obstacle_avoid(float distance)
 	{
 		stop();
 		TIM_SetCompare1(TIM4, 181);//探测仪左转45度
-		delay_ms(5000);
+		delay_ms(500);
 		//HCSR04_StartMeasure();	
 		//delay_ms(50);
 		distance=UltrasonicWave_Distance;
 		if(distance<15)
 		{
 				TIM_SetCompare1(TIM4, 191);//探测仪右转45度
-				delay_ms(5000);
+				delay_ms(500);
 				//HCSR04_StartMeasure();	
 				//delay_ms(50);
 				distance=UltrasonicWave_Distance;
