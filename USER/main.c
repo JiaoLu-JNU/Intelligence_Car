@@ -170,10 +170,13 @@ int main(void)
     }
 }
 */
+
+
 int main(void)
 {								  
 	u8 key;  
 	u8 mode;
+	int Start_flag=0;
 	//Stm32_Clock_Init(336,8,2,7); //系统时钟设置
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//设置系统中断优先级分组2
 	delay_init(168);	     //延时初始化
@@ -195,12 +198,13 @@ int main(void)
 	{
 		LED0 =! LED0;
 		key=PS2_DataKey();
-		if(key!=0)                   //有按键按下
+		if(key==13|key==14|key==15|key==16)                   //模式选择功能有按键按下
     	{
 			printf("  \r\n   %d  is  light  \r\n",Data[1]);//ID
 			printf("  \r\n   %d  is  pressed  \r\n",key);
 			Mode_select(key);
 			mode=key;
+			Start_flag=0;
 			if(key == 11)
 			{
 				PS2_Vibration(0xFF,0x00);  //发出震动后必须有延时  delay_ms(1000);
@@ -214,7 +218,14 @@ int main(void)
 			else
 				 PS2_Vibration(0x00,0x00); 
     	}
-		Mode_run(mode);
+		if(key==4)
+		{
+			Start_flag=1;
+		}
+		if(Start_flag==1)
+		{
+			Mode_run(mode);
+		}
 		printf(" %5d %5d %5d %5d\r\n",PS2_AnologData(PSS_LX),PS2_AnologData(PSS_LY),
 		                              PS2_AnologData(PSS_RX),PS2_AnologData(PSS_RY) );
 		delay_ms(50);

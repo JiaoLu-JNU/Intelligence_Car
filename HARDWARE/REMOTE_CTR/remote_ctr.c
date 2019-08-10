@@ -21,7 +21,7 @@ u8 Mode_select(u8 key)
 			break;
 		case 16://TRACE_MODE
 				Trace_Init();	
-				TRACE_Implement();
+				//TRACE_Implement();
 			break;
 		case 14://OBSTACLE_AVOID_MODE
 				TIM4_PWM_Init(200-1,7199-1);
@@ -56,7 +56,7 @@ void Mode_run(u8 mode)
 	}
 }
 
-
+/*
 void Remote_Ctr_Gear(u8 key)
 {
 	extern u16 gear_run;
@@ -91,7 +91,7 @@ void Remote_Ctr_Gear(u8 key)
 	}
 
 }
-
+*/
 
 
 
