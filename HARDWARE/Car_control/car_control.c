@@ -5,24 +5,24 @@
 #include "bluetooth_ctr.h"
 
 	/****************************************************************************
-	 Ӳ������
-	   P1_6 ������ģ��ENA	ʹ�ܶˣ�����PWM�źŵ����ٶ�
-     P1_7 ������ģ��ENB	ʹ�ܶˣ�����PWM�źŵ����ٶ�
+	 硬件连接
+	   P1_6 接驱动模块ENA	使能端，输入PWM信号调节速度
+     P1_7 接驱动模块ENB	使能端，输入PWM信号调节速度
 
-     P3_4 P3_5 ��IN1  IN2    �� P3_4=1,P3_5=0; ʱ������ת	 ������ɫ�����OUT1 OUT2������ 
-     P3_4 P3_5 ��IN1  IN2    �� P3_4=0,P3_5=1; ʱ������ת                
-     P3_6 P3_7 ��IN3  IN4	 �� P3_6=1,P3_7=0; ʱ�ҵ����ת	 ������ɫ�����OUT3 OUT4���ҵ��
-     P3_6 P3_7 ��IN3  IN4	 �� P3_6=0,P3_7=1; ʱ�ҵ����ת
+     P3_4 P3_5 接IN1  IN2    当 P3_4=1,P3_5=0; 时左电机正转	 驱动蓝色输出端OUT1 OUT2接左电机 
+     P3_4 P3_5 接IN1  IN2    当 P3_4=0,P3_5=1; 时左电机反转                
+     P3_6 P3_7 接IN3  IN4	 当 P3_6=1,P3_7=0; 时右电机正转	 驱动蓝色输出端OUT3 OUT4接右电机
+     P3_6 P3_7 接IN3  IN4	 当 P3_6=0,P3_7=1; 时右电机反转
 
-     P1_0����·Ѱ��ģ��ӿڵ�һ·����źż��пذ�������ΪOUT1
-     P1_1����·Ѱ��ģ��ӿڵڶ�·����źż��пذ�������ΪOUT2	
-     P1_2����·Ѱ��ģ��ӿڵ���·����źż��пذ�������ΪOUT3
-	 P1_3����·Ѱ��ģ��ӿڵ���·����źż��пذ�������ΪOUT4
-	 ��·Ѱ�����������ź�(���ߣ�Ϊ0  û���źţ����ߣ�Ϊ1
-	 ��·Ѱ����������Դ+5V GND ȡ���ڵ�Ƭ���忿��Һ�����ڶԱȶȵĵ�Դ����ӿ�
+     P1_0接四路寻迹模块接口第一路输出信号即中控板上面标记为OUT1
+     P1_1接四路寻迹模块接口第二路输出信号即中控板上面标记为OUT2	
+     P1_2接四路寻迹模块接口第三路输出信号即中控板上面标记为OUT3
+	 P1_3接四路寻迹模块接口第四路输出信号即中控板上面标记为OUT4
+	 四路寻迹传感器有信号(白线）为0  没有信号（黑线）为1
+	 四路寻迹传感器电源+5V GND 取自于单片机板靠近液晶调节对比度的电源输出接口
 																							 
-	 ���ڵ�Ƭ����Դ����������ģ���ڴ�LDO��ѹоƬ�������������͵ĵ�ѹ6Vʱ���������ȶ���5V
-	 �ֱ�����ű�+5 ��GND �������Դ������Ϊ��Ƭ��ϵͳ�Ĺ����Դ��
+	 关于单片机电源：本店驱动模块内带LDO稳压芯片，当电池输入最低的电压6V时候可以输出稳定的5V
+	 分别在针脚标+5 与GND 。这个电源可以作为单片机系统的供电电源。
 	****************************************************************************/
 	
 
@@ -33,17 +33,17 @@ void CAR_Init(void)
 {    	 
   GPIO_InitTypeDef  GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);//ʹ��GPIOFʱ��
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);//使能GPIOF时钟
 
-  //GPIOF9,F10��ʼ������
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_7 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14;//LED0��LED1��ӦIO��
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//��ͨ���ģʽ
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//�������
+  //GPIOF9,F10初始化设置
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_7 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14;//LED0和LED1对应IO口
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//����
-  GPIO_Init(GPIOF, &GPIO_InitStructure);//��ʼ��GPIO
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
+  GPIO_Init(GPIOF, &GPIO_InitStructure);//初始化GPIO
 	
-	GPIO_SetBits(GPIOF,GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_7 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14);//GPIOF9,F10���øߣ�����
+	GPIO_SetBits(GPIOF,GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_7 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14);//GPIOF9,F10设置高，灯灭
 
 }
 /*
@@ -74,7 +74,7 @@ void Mode_select(u16 mode)
 }
 */
 
-//��λת��Ϊ�ٶ�
+//档位转化为速度
 u16 gear_trans(u16 gear)
 {
 	u16 Pulse=0;
@@ -103,65 +103,65 @@ u16 gear_trans(u16 gear)
 }
 
 /************************************************************************/
-void drive(u16 gear)	//ǰ������
+void drive(u16 gear)	//前进函数
 {
 		u16 Pulse;
 		Pulse=gear_trans(gear);
-		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0��Ӧ����GPIOF.9���ͣ���  ��ͬLED0=0;
-		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1��Ӧ����GPIOF.10���ߣ��� ��ͬLED1=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		TIM_SetCompare1(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare2(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare3(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare4(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
+		TIM_SetCompare1(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,Pulse);	//修改比较值，修改占空比
 
 }
 
-void reverse(u16 gear)	//���˺���
+void reverse(u16 gear)	//倒退函数
 {
 		u16 Pulse;
 		Pulse=gear_trans(gear);
-		GPIO_SetBits(GPIOF,GPIO_Pin_1);  //LED0��Ӧ����GPIOF.9���ͣ���  ��ͬLED0=0;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_3);   //LED1��Ӧ����GPIOF.10���ߣ��� ��ͬLED1=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
 	
-		GPIO_ResetBits(GPIOF,GPIO_Pin_5);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_SetBits(GPIOF,GPIO_Pin_7); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_ResetBits(GPIOF,GPIO_Pin_12);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_SetBits(GPIOF,GPIO_Pin_11); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_ResetBits(GPIOF,GPIO_Pin_14);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_SetBits(GPIOF,GPIO_Pin_13); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		TIM_SetCompare1(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare2(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare3(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare4(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
+		TIM_SetCompare1(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,Pulse);	//修改比较值，修改占空比
 
 }
 
-void stop(void)	//���˺���
+void stop(void)	//倒退函数
 {
-		GPIO_SetBits(GPIOF,GPIO_Pin_1);  //LED0��Ӧ����GPIOF.9���ͣ���  ��ͬLED0=0;
-		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1��Ӧ����GPIOF.10���ߣ��� ��ͬLED1=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_SetBits(GPIOF,GPIO_Pin_7); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_SetBits(GPIOF,GPIO_Pin_11); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_SetBits(GPIOF,GPIO_Pin_13); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 
 }
 
@@ -170,22 +170,22 @@ void left_move(u16 gear_change)
 		u16 Pulse;
 		Pulse=gear_trans(gear_change);
 	
-		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0��Ӧ����GPIOF.9���ͣ���  ��ͬLED0=0;
-		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1��Ӧ����GPIOF.10���ߣ��� ��ͬLED1=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		TIM_SetCompare1(TIM3,500);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare2(TIM3,500);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare3(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare4(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
+		TIM_SetCompare1(TIM3,500);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,500);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,Pulse);	//修改比较值，修改占空比
 }
 
 void right_move(u16 gear_change)
@@ -193,22 +193,82 @@ void right_move(u16 gear_change)
 		u16 Pulse;
 		Pulse=gear_trans(gear_change);
 	
-		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0��Ӧ����GPIOF.9���ͣ���  ��ͬLED0=0;
-		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1��Ӧ����GPIOF.10���ߣ��� ��ͬLED1=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0��Ӧ����GPIOF.0���ߣ���  ��ͬLED0=1;
-		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1��Ӧ����GPIOF.10���ͣ��� ��ͬLED1=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
 	
-		TIM_SetCompare1(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare2(TIM3,Pulse);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare3(TIM3,500);	//�޸ıȽ�ֵ���޸�ռ�ձ�
-		TIM_SetCompare4(TIM3,500);	//�޸ıȽ�ֵ���޸�ռ�ձ�
+		TIM_SetCompare1(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,Pulse);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,500);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,500);	//修改比较值，修改占空比
 }
 
+
+void drive_pulse(int pulse)
+{	
+		GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
+	
+		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		TIM_SetCompare1(TIM3,pulse);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,pulse);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,pulse);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,pulse);	//修改比较值，修改占空比
+
+
+}
+void reverse_pulse(int pulse)
+{
+		GPIO_SetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
+	
+		GPIO_ResetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		GPIO_ResetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		GPIO_ResetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_SetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		TIM_SetCompare1(TIM3,pulse);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,pulse);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,pulse);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,pulse);	//修改比较值，修改占空比
+}
+void turn_pulse(int pulse1,int pulse2)
+{
+	 GPIO_ResetBits(GPIOF,GPIO_Pin_1);  //LED0对应引脚GPIOF.9拉低，亮  等同LED0=0;
+		GPIO_SetBits(GPIOF,GPIO_Pin_3);   //LED1对应引脚GPIOF.10拉高，灭 等同LED1=1;
+	
+		GPIO_SetBits(GPIOF,GPIO_Pin_5);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_7); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		GPIO_SetBits(GPIOF,GPIO_Pin_12);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_11); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		GPIO_SetBits(GPIOF,GPIO_Pin_14);	   //LED0对应引脚GPIOF.0拉高，灭  等同LED0=1;
+		GPIO_ResetBits(GPIOF,GPIO_Pin_13); //LED1对应引脚GPIOF.10拉低，亮 等同LED1=0;
+	
+		TIM_SetCompare1(TIM3,pulse1);	//修改比较值，修改占空比
+		TIM_SetCompare2(TIM3,pulse1);	//修改比较值，修改占空比
+		TIM_SetCompare3(TIM3,pulse2);	//修改比较值，修改占空比
+		TIM_SetCompare4(TIM3,pulse2);	//修改比较值，修改占空比
+}
 
