@@ -17,7 +17,8 @@ void stop(void);
 void left_move(u16 gear_change);
 void right_move(u16 gear_change);
 //void Mode_select(u16 mode);
-
-
+void drive_pulse(int pulse);
+void reverse_pulse(int pulse);
+void turn_pulse(int pulse1,int pulse2);
 #endif
 

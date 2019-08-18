@@ -15,6 +15,7 @@
 ////////////////////////////////////////////////////////////////////////////////// 	
 
 void Remote_Ctr_Init(void);
+void Remote_Ctr(void);
 u8 Mode_select(u8 key);
 void Mode_run(u8 mode);
 #endif
