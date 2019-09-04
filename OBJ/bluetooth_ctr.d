@@ -1,5 +1,5 @@
 ..\obj\bluetooth_ctr.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.c
-..\obj\bluetooth_ctr.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\Car_control\car_control.h
 ..\obj\bluetooth_ctr.o: ..\SYSTEM\sys\sys.h
 ..\obj\bluetooth_ctr.o: ..\USER\stm32f4xx.h
 ..\obj\bluetooth_ctr.o: ..\CORE\core_cm4.h
@@ -36,3 +36,12 @@
 ..\obj\bluetooth_ctr.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\bluetooth_ctr.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\bluetooth_ctr.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\Trace\trace.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\PS2\ps2.h
+..\obj\bluetooth_ctr.o: ..\SYSTEM\delay\delay.h
+..\obj\bluetooth_ctr.o: ..\SYSTEM\usart\usart.h
+..\obj\bluetooth_ctr.o: D:\2.keil5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\bluetooth_ctr.o: ..\HARDWARE\LED\led.h

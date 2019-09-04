@@ -1,109 +1,50 @@
-#include "trace.h"
+/****************************************************************************
+ * @file: trace.c
+ * @author: jiaolu
+ * @version: ultimate		 
+ * @date:	2019/08/29
+ * @brief: 本文件包含了智能小车巡线模块的各种功能函数，包括IO口初始化、巡线
+					 传感器接收扫描、巡线执行
+ * @History: // 修改历史记录列表，每条修改记录包括修改日期、修改者及内容简述
+		1.  date:
+			author:
+		    modification:
+		2. ...
+****************************************************************************/
+
 #include "delay.h"
 #include "sys.h"
 #include "car_control.h"
 #include "led.h"
 
-/*
-u8 Tracing_Right=0;//Tracing_Right指右侧传感器状态，默认为0，当右侧检测到黑线时，置1，驱动小车右移
-u8 Tracing_Left=0;//Tracing_Right指左侧传感器状态，默认为0，当左侧检测到黑线时，置1，驱动小车左移
-void EXTI2_IRQHandler(void)
-{	
-	extern u16 GEAR;
-	GEAR=1;
-	drive(GEAR);
-	//printf("yizhongduan");
-	delay_ms(10);
-	LED0=0;					    //先点亮红灯
-	LED1=1;					    //先点亮红灯	
-	Tracing_Right=1;
-	left_move(GEAR+Tracing_Right);
-	EXTI_ClearITPendingBit(EXTI_Line2);  //清除LINE3上的中断标志位  
-	Tracing_Left=0;
-}
- 
-void EXTI4_IRQHandler(void)
-{
-	extern u16 GEAR;
-	GEAR=1;
-	drive(GEAR);
-	//printf("erzhongduan");
-	delay_ms(10);
-	LED0=1;				    //先点亮红灯
-	LED1=0;			    //先点亮红灯	
-	Tracing_Left=1;
-	right_move(GEAR+Tracing_Left);
-	EXTI_ClearITPendingBit(EXTI_Line4);  //清除LINE3上的中断标志位  
-	Tracing_Right=0;
-}
-
-
- //最初开关指示灯常亮的原因是选错了IO口，用了PC0和PC2，换成PF2和PF4就好啦，why？
- 
+/*Trace init-----------------------------------------------------------------*/
+/**
+ * @brief: 循迹传感器所接IO口初始化
+ * @param: NONE
+ * @retval：NONE
+ * @others: 最初循迹模块上面开关指示灯常亮的原因是选错了IO口，用了PC0和PC2
+					  换成PF2和PF4就好啦，why？
+**/
 void Trace_Init(void)
 {
 	GPIO_InitTypeDef   GPIO_InitStructure;
-	NVIC_InitTypeDef   NVIC_InitStructure;
-	EXTI_InitTypeDef   EXTI_InitStructure;
-
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//使能SYSCFG时钟
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE); 	//使能PORTF时钟	
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE); 	//使能GPIOF时钟	
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_4;           //GPIOF9
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_2 | GPIO_Pin_4 | GPIO_Pin_6; 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;        //复用功能
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	//速度100MHz
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;  //推挽复用输出
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;       //上拉
-	GPIO_Init(GPIOF,&GPIO_InitStructure);              //初始化PF9
- 
-	GPIO_SetBits(GPIOF,GPIO_Pin_2);
-	GPIO_SetBits(GPIOF,GPIO_Pin_4);
-	
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOF, EXTI_PinSource2);//PE2 连接到中断线2
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOF, EXTI_PinSource4);//PE3 连接到中断线3
-	
-  EXTI_InitStructure.EXTI_Line = EXTI_Line2;//LINE0
-  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//中断事件
-  EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿触发 
-  EXTI_InitStructure.EXTI_LineCmd = ENABLE;//使能LINE0
-  EXTI_Init(&EXTI_InitStructure);//配置
-	
-	EXTI_InitStructure.EXTI_Line = EXTI_Line4;
-  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;//中断事件
-  EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿触发
-  EXTI_InitStructure.EXTI_LineCmd = ENABLE;//中断线使能
-  EXTI_Init(&EXTI_InitStructure);//配置
- 
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;//外部中断0
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;//抢占优先级0
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02;//子优先级2
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//使能外部中断通道
-  NVIC_Init(&NVIC_InitStructure);//配置
-	
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;//外部中断2
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x03;//抢占优先级3
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02;//子优先级2
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//使能外部中断通道
-  NVIC_Init(&NVIC_InitStructure);//配置
+	GPIO_Init(GPIOF,&GPIO_InitStructure);           
 	
 }
-*/
-
-
-void Trace_Init(void)
-{
-	GPIO_InitTypeDef   GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE); 	//使能PORTF时钟	
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_2 | GPIO_Pin_4 | GPIO_Pin_6;           //GPIOF9
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;        //复用功能
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	//速度100MHz
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;  //推挽复用输出
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;       //上拉
-	GPIO_Init(GPIOF,&GPIO_InitStructure);              //初始化PF9
-	
-}
-
+/*Trace scan&&implement-------------------------------------------------------*/
+/**
+ * @brief: 循迹模块扫描函数，参照STM32按键实验
+ * @param: mode，==1表示支持连续按，==0表示不支持连续按
+ * @retval: 4个循迹模块的编号，返回1表示1号传感器压线
+ * @others: NONE
+**/
 
 u8 TRACE_Scan(u8 mode)
 {	 
@@ -121,30 +62,58 @@ u8 TRACE_Scan(u8 mode)
 	else if(TRACE1==0&&TRACE2==0&&TRACE3==0&&TRACE4==0)trace_up=1;
 		return 0;// 无按键按下
 }
-
-
+/**
+ * @brief: 循迹执行模块（矩形巡线），根据检测到的传感器信号做出相应动作
+ * @param: NONE
+ * @retval：NONE
+ * @others: 由于此项目主要用来练习编程能力，so此处只编写了矩形巡线
+						并没有对其他线型情况以及各种算法做深入探究
+**/
 void TRACE_Implement(void)
 {
 		extern u16 GEAR;
+		u8 Edge_Flag=0;//矩形90度角检测，检测到后此标志位置1
 		u8 trace_scan; 
-		trace_scan=TRACE_Scan(0);		//得到键值
+		trace_scan=TRACE_Scan(0);//得到压线的传感器的编号		
 	  if(trace_scan)
 		{						   
 			switch(trace_scan)
 			{				 
-				case TRACE1_SCAN:	//控制蜂鸣器
-					left_move(GEAR+2);
+				case TRACE1_SCAN:	//检测到最左侧传感器
+					left_move_2(GEAR+2);//以较大速度左转
+					Edge_Flag	=	1;//90度标志位置1
+					delay_ms(150);//转向90度结束
+					left_move(GEAR);//小左转
 					break;
-				case TRACE2_SCAN:	//控制LED0翻转
-					right_move(GEAR+2);
+				case TRACE2_SCAN: //检测到最右侧传感器
+					right_move_2(GEAR+2);
+					Edge_Flag	=	1;
+					delay_ms(150); 
+					right_move(GEAR);
 					LED0=!LED0;
 					break;
-				case TRACE3_SCAN:	//控制LED1翻转	 
-					left_move(GEAR);
+				case TRACE3_SCAN:	//检测到中间左侧传感器
+					if(Edge_Flag==1)//说明刚刚经过90度弯
+					{
+						right_move(GEAR);//中间左侧传感器压线时向右转
+						Edge_Flag=0;
+					}
+					else
+					{
+						left_move(GEAR);//没有经过90度弯，中间左侧传感器压线时向左转
+					}
 					LED1=!LED1;
 					break;
-				case TRACE4_SCAN:	//同时控制LED0,LED1翻转 
-					right_move(GEAR);
+				case TRACE4_SCAN:	//检测到中间右侧传感器
+					if(Edge_Flag==1)
+					{
+						left_move(GEAR);
+						Edge_Flag=0;
+					}
+					else
+					{
+						right_move(GEAR);
+					}
 					LED0=!LED0;
 					LED1=!LED1;
 					break;

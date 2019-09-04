@@ -41,9 +41,9 @@
 ..\obj\main.o: ..\HARDWARE\LED\led.h
 ..\obj\main.o: ..\HARDWARE\LCD\lcd.h
 ..\obj\main.o: D:\2.keil5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\main.o: ..\HARDWARE\PWM\pwm.h
 ..\obj\main.o: ..\HARDWARE\Car_control\car_control.h
-..\obj\main.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
 ..\obj\main.o: ..\HARDWARE\Trace\trace.h
-..\obj\main.o: ..\HARDWARE\PS2\ps2.h
+..\obj\main.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
 ..\obj\main.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
+..\obj\main.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\main.o: ..\HARDWARE\PS2\ps2.h

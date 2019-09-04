@@ -1,5 +1,5 @@
 ..\obj\obstacle_avoid.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.c
-..\obj\obstacle_avoid.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
+..\obj\obstacle_avoid.o: ..\SYSTEM\delay\delay.h
 ..\obj\obstacle_avoid.o: ..\SYSTEM\sys\sys.h
 ..\obj\obstacle_avoid.o: ..\USER\stm32f4xx.h
 ..\obj\obstacle_avoid.o: ..\CORE\core_cm4.h
@@ -36,9 +36,13 @@
 ..\obj\obstacle_avoid.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\obstacle_avoid.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\obstacle_avoid.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\obstacle_avoid.o: ..\SYSTEM\delay\delay.h
 ..\obj\obstacle_avoid.o: ..\SYSTEM\usart\usart.h
 ..\obj\obstacle_avoid.o: D:\2.keil5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\obstacle_avoid.o: ..\HARDWARE\Car_control\car_control.h
+..\obj\obstacle_avoid.o: ..\HARDWARE\Trace\trace.h
+..\obj\obstacle_avoid.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
+..\obj\obstacle_avoid.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
+..\obj\obstacle_avoid.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\obstacle_avoid.o: ..\HARDWARE\PS2\ps2.h
 ..\obj\obstacle_avoid.o: ..\HARDWARE\LCD\lcd.h
 ..\obj\obstacle_avoid.o: D:\2.keil5\ARM\ARMCC\Bin\..\include\stdlib.h

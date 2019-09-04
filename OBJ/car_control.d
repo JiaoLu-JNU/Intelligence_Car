@@ -40,3 +40,8 @@
 ..\obj\car_control.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
 ..\obj\car_control.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
 ..\obj\car_control.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\car_control.o: ..\HARDWARE\PS2\ps2.h
+..\obj\car_control.o: ..\SYSTEM\delay\delay.h
+..\obj\car_control.o: ..\HARDWARE\LED\led.h
+..\obj\car_control.o: ..\SYSTEM\usart\usart.h
+..\obj\car_control.o: D:\2.keil5\ARM\ARMCC\Bin\..\include\stdio.h

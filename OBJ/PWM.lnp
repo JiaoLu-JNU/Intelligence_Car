@@ -2,7 +2,6 @@
 "..\obj\main.o"
 "..\obj\stm32f4xx_it.o"
 "..\obj\system_stm32f4xx.o"
-"..\obj\pwm.o"
 "..\obj\car_control.o"
 "..\obj\led.o"
 "..\obj\obstacle_avoid.o"

@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\PWM;..\FWLIB\inc;..\HARDWARE\Car_control;..\HARDWARE\Obstacle_avoid;..\HARDWARE\Trace;..\HARDWARE\REMOTE_CTR;..\HARDWARE\BLUETOOTH_CTR;..\HARDWARE\LCD;..\HARDWARE\PS2</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\FWLIB\inc;..\HARDWARE\Car_control;..\HARDWARE\Obstacle_avoid;..\HARDWARE\Trace;..\HARDWARE\REMOTE_CTR;..\HARDWARE\BLUETOOTH_CTR;..\HARDWARE\LCD;..\HARDWARE\PS2</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -428,11 +428,6 @@
         <Group>
           <GroupName>HARDWARE</GroupName>
           <Files>
-            <File>
-              <FileName>pwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\PWM\pwm.c</FilePath>
-            </File>
             <File>
               <FileName>car_control.c</FileName>
               <FileType>1</FileType>

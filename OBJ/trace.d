@@ -1,5 +1,5 @@
 ..\obj\trace.o: ..\HARDWARE\Trace\trace.c
-..\obj\trace.o: ..\HARDWARE\Trace\trace.h
+..\obj\trace.o: ..\SYSTEM\delay\delay.h
 ..\obj\trace.o: ..\SYSTEM\sys\sys.h
 ..\obj\trace.o: ..\USER\stm32f4xx.h
 ..\obj\trace.o: ..\CORE\core_cm4.h
@@ -36,6 +36,10 @@
 ..\obj\trace.o: ..\FWLIB\inc\stm32f4xx_dac.h
 ..\obj\trace.o: ..\FWLIB\inc\stm32f4xx_dcmi.h
 ..\obj\trace.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
-..\obj\trace.o: ..\SYSTEM\delay\delay.h
 ..\obj\trace.o: ..\HARDWARE\Car_control\car_control.h
+..\obj\trace.o: ..\HARDWARE\Trace\trace.h
+..\obj\trace.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
+..\obj\trace.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
+..\obj\trace.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\trace.o: ..\HARDWARE\PS2\ps2.h
 ..\obj\trace.o: ..\HARDWARE\LED\led.h

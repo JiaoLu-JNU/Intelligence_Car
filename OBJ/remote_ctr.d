@@ -1,5 +1,5 @@
 ..\obj\remote_ctr.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.c
-..\obj\remote_ctr.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
+..\obj\remote_ctr.o: ..\HARDWARE\Car_control\car_control.h
 ..\obj\remote_ctr.o: ..\SYSTEM\sys\sys.h
 ..\obj\remote_ctr.o: ..\USER\stm32f4xx.h
 ..\obj\remote_ctr.o: ..\CORE\core_cm4.h
@@ -38,3 +38,9 @@
 ..\obj\remote_ctr.o: ..\FWLIB\inc\stm32f4xx_fsmc.h
 ..\obj\remote_ctr.o: ..\HARDWARE\Trace\trace.h
 ..\obj\remote_ctr.o: ..\HARDWARE\Obstacle_avoid\obstacle_avoid.h
+..\obj\remote_ctr.o: ..\HARDWARE\REMOTE_CTR\remote_ctr.h
+..\obj\remote_ctr.o: ..\HARDWARE\BLUETOOTH_CTR\bluetooth_ctr.h
+..\obj\remote_ctr.o: ..\HARDWARE\PS2\ps2.h
+..\obj\remote_ctr.o: ..\SYSTEM\delay\delay.h
+..\obj\remote_ctr.o: ..\SYSTEM\usart\usart.h
+..\obj\remote_ctr.o: D:\2.keil5\ARM\ARMCC\Bin\..\include\stdio.h
